@@ -2,6 +2,7 @@ var stageWidth = document.body.offsetWidth;
 var stageHeight = document.body.offsetHeight;
 const paddleWidth = 50;
 const paddleHeight = 10;
+var playing = false;
 
 var animate =
   window.requestAnimationFrame ||
@@ -37,8 +38,17 @@ var update = function() {
 var step = function() {
   update();
   render();
-  animate(step);
+  if (playing) {
+    animate(step);
+  }
 };
+
+function togglePlaying() {
+  playing = !playing;
+  if (playing) {
+    animate(step)
+  }
+}
 
 function Paddle(x, y, stageWidth, stageHeight) {
   this.x = x;
@@ -190,6 +200,9 @@ document.body.appendChild(canvas);
 animate(step);
 
 window.addEventListener("keydown", function(event) {
+  if (event.keyCode === 32) {
+      togglePlaying()
+  }
   keysDown[event.keyCode] = true;
 });
 

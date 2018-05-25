@@ -18,5 +18,8 @@
   "homepage": "https://github.com/kuzzleio/demo-pong#readme",
   "dependencies": {
     "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "less": "^3.0.4"
   }
 }
