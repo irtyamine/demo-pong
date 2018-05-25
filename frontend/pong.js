@@ -3,6 +3,7 @@ var stageHeight = document.body.offsetHeight;
 const paddleWidth = 50;
 const paddleHeight = 10;
 var playing = false;
+var score = [0, 0];
 
 var animate =
   window.requestAnimationFrame ||
@@ -11,10 +12,10 @@ var animate =
   function(callback) {
     window.setTimeout(callback, 1000 / 60);
   };
-var canvas = document.createElement("canvas");
+var canvas = document.createElement('canvas');
 canvas.width = stageWidth;
 canvas.height = stageHeight;
-var context = canvas.getContext("2d");
+var context = canvas.getContext('2d');
 var player = new Player();
 var computer = new Computer();
 var ball = new Ball(stageWidth / 2, stageHeight / 2);
@@ -22,7 +23,7 @@ var ball = new Ball(stageWidth / 2, stageHeight / 2);
 var keysDown = {};
 
 var render = function() {
-  context.fillStyle = "#000000";
+  context.fillStyle = '#383838';
   context.fillRect(0, 0, stageWidth, stageHeight);
   player.render();
   computer.render();
@@ -46,7 +47,10 @@ var step = function() {
 function togglePlaying() {
   playing = !playing;
   if (playing) {
-    animate(step)
+    document.getElementsByClassName('splash')[0].style.visibility = 'hidden';
+    animate(step);
+  } else {
+    document.getElementsByClassName('splash')[0].style.visibility = 'visible';
   }
 }
 
@@ -60,7 +64,7 @@ function Paddle(x, y, stageWidth, stageHeight) {
 }
 
 Paddle.prototype.render = function() {
-  context.fillStyle = "#FFFFFF";
+  context.fillStyle = '#FFFFFF';
   context.fillRect(this.x, this.y, this.width, this.height);
 };
 
@@ -79,7 +83,6 @@ Paddle.prototype.move = function(x, y) {
 };
 
 function Computer() {
-
   this.paddle = new Paddle(
     stageWidth / 2 - paddleWidth / 2,
     paddleHeight,
@@ -144,7 +147,7 @@ function Ball(x, y) {
 Ball.prototype.render = function() {
   context.beginPath();
   context.arc(this.x, this.y, 5, 2 * Math.PI, false);
-  context.fillStyle = "#FFFFFF";
+  context.fillStyle = '#FFFFFF';
   context.fill();
 };
 
@@ -196,16 +199,20 @@ Ball.prototype.update = function(paddle1, paddle2) {
   }
 };
 
-document.body.appendChild(canvas);
+// module.exports = {
+//   init: function() {
+document.getElementsByClassName('pong-container')[0].appendChild(canvas);
 animate(step);
 
-window.addEventListener("keydown", function(event) {
+window.addEventListener('keydown', function(event) {
   if (event.keyCode === 32) {
-      togglePlaying()
+    togglePlaying();
   }
   keysDown[event.keyCode] = true;
 });
 
-window.addEventListener("keyup", function(event) {
+window.addEventListener('keyup', function(event) {
   delete keysDown[event.keyCode];
 });
+//   }
+// };
