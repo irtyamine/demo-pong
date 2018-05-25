@@ -4,7 +4,7 @@ const Player = require('./players').Player;
 
 var stageWidth = document.body.offsetWidth;
 var stageHeight = document.body.offsetHeight;
-const paddleWidth = 50;
+const paddleWidth = stageWidth * 0.045;
 const paddleHeight = 10;
 var playing = false;
 var score = [0, 0];
@@ -40,12 +40,12 @@ var ball = new Ball(
   context,
   () => {
     computer.score++;
-    console.log(`Computer: ${computer.score}`);
+    // console.log(`Computer: ${computer.score}`);
     document.getElementById('score-player-1').innerHTML = computer.score;
   },
   () => {
     player.score++;
-    console.log(`Player: ${player.score}`);
+    // console.log(`Player: ${player.score}`);
     document.getElementById('score-player-2').innerHTML = player.score;
   }
 );

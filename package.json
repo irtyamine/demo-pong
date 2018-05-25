@@ -5,7 +5,7 @@
   "main": "backend/index.js",
   "scripts": {
     "start": "node backend/index.js",
-    "daemon" : "sudo node backend/ble-remote-daemon/index.js"
+    "daemon": "sudo node backend/ble-remote-daemon/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,11 +18,14 @@
   },
   "homepage": "https://github.com/kuzzleio/demo-pong#readme",
   "dependencies": {
-    "express": "^4.15.3",
     "binary": "^0.3.0",
-    "noble": "^1.9.1"
+    "bufferutil": "^3.0.1",
+    "express": "^4.15.3",
+    "noble": "^1.9.1",
+    "utf-8-validate": "^3.0.2",
+    "ws": "^5.2.0"
   },
   "devDependencies": {
     "less": "^3.0.4"
-  }, 
+  }
 }

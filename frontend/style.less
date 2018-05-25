@@ -41,6 +41,17 @@ body {
   justify-content: center;
   height: 100%;
   width: 100%;
+
+  .player-indicator {
+    border: dashed 2px;
+    padding: 15px;
+    margin: 10px;
+
+    &.connected {
+      background-color: fade(@console-color, 20%);
+      border-style: solid;
+    }
+  }
 }
 
 .score {
