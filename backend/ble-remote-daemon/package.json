@@ -1,0 +1,16 @@
+{
+  "name": "ble-remote-daemon",
+  "version": "1.0.0",
+  "description": "Daemon for Kuzzle Pong BLE remotes",
+  "main": "index.js",
+  "scripts": {
+    "daemon": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eric Trousset",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "binary": "^0.3.0",
+    "noble": "^1.9.1"
+  }
+}
