@@ -31,24 +31,21 @@ Computer.prototype.update = function(ball, stageWidth, stageHeight) {
   }
 };
 
-function Player(context, stageWidth, stageHeight, paddleWidth, paddleHeight) {
+function Player(
+  context,
+  stageWidth,
+  stageHeight,
+  paddleWidth,
+  paddleHeight,
+  paddleYPosition
+) {
   this.paddle = new Paddle(
     stageWidth / 2 - paddleWidth / 2,
-    stageHeight - paddleHeight * 2,
+    paddleYPosition,
     context,
     paddleWidth,
     paddleHeight
   );
-  this.keysDown = {};
-  this.score = 0;
-
-  window.addEventListener('keydown', event => {
-    this.keysDown[event.keyCode] = true;
-  });
-
-  window.addEventListener('keyup', event => {
-    delete this.keysDown[event.keyCode];
-  });
 }
 
 Player.prototype.render = function() {

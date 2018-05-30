@@ -5,6 +5,7 @@ const DEVICE_TIMEOUT = 2000;
 
 class BLERemoteDaemon extends EventEmitter {
   constructor() {
+    super();
     console.log('-- Kuzzle Pong BLE remote daemon --------------');
 
     this.devicesList = {};

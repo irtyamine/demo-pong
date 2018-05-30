@@ -23,6 +23,7 @@
     "express": "^4.15.3",
     "noble": "^1.9.1",
     "utf-8-validate": "^3.0.2",
+    "vue": "^2.5.16",
     "ws": "^5.2.0"
   },
   "devDependencies": {

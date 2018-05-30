@@ -53,7 +53,6 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
       bottom_x > paddle1.x
     ) {
       this.y_speed = -3;
-      // console.log(`just hit paddle 1 (speed ${paddle1.x_speed})`);
       this.x_speed += paddle1.x_speed / 2;
       this.y += this.y_speed;
     }
@@ -65,7 +64,6 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
       bottom_x > paddle2.x
     ) {
       this.y_speed = 3;
-      // console.log(`just hit paddle 2 (speed ${paddle2.x_speed})`);
       this.x_speed += paddle2.x_speed / 2;
       this.y += this.y_speed;
     }
