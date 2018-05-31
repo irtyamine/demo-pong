@@ -1,13 +1,19 @@
+import _ from 'lodash';
 import Vue from 'vue/dist/vue.esm.js';
 import pong from '../pong';
 
 window.ws = undefined;
+
+function precise(x, precision) {
+  return Number.parseFloat(x).toPrecision(precision);
+}
 
 new Vue({
   el: '#pong',
   data: {
     playerIds: [],
     scores: [0, 0],
+    positions: {},
     isPlaying: false
   },
   methods: {
@@ -19,19 +25,31 @@ new Vue({
       pong.setPlaying(this.isPlaying);
     },
     addPlayer(id) {
-      pong.addPlayer(id);
-      this.playerIds.push(id);
+      const ids = pong.addPlayer(id);
+      this.playerIds = ids;
     },
     removePlayer(id) {
       // TODO
     },
-    updatePosition(playerId, position) {
-      // TODO
+    updatePosition(positions) {
+      if (!this.arePlayersConnected) {
+        return;
+      }
+      this.positions = positions;
+      Object.keys(positions).forEach(playerId => {
+        pong.updatePosition(playerId, positions[playerId]);
+      });
     }
   },
   computed: {
     arePlayersConnected() {
-      return this.playerIds[0] != null && this.playerIds[1] != null;
+      return this.connectedPlayer1 && this.connectedPlayer2;
+    },
+    connectedPlayer1() {
+      return this.playerIds[0] != undefined;
+    },
+    connectedPlayer2() {
+      return this.playerIds[1] != undefined;
     }
   },
   beforeDestroy() {
@@ -63,13 +81,17 @@ new Vue({
           break;
 
         case 'position':
-          this.updatePosition(parsed.id, parsed.position);
+          this.updatePosition(parsed.positions);
           break;
 
         default:
           console.warn(`skipping unknown message from server ${parsed.event}`);
           break;
       }
+    };
+
+    window.ws.onopen = () => {
+      window.ws.send('getPlayers');
     };
   }
 });

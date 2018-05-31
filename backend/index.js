@@ -5,7 +5,9 @@ const bleDaemon = require('./ble-remote-daemon');
 
 const HTTP_PORT = 1234;
 const WS_PORT = 8080;
+const FRAME_RATE = 60;
 
+var intervalId;
 const wss = new WebSocket.Server({ port: WS_PORT });
 app.use(express.static('frontend/dist'));
 
@@ -16,24 +18,58 @@ app.listen(HTTP_PORT, () =>
 );
 
 wss.on('connection', function connection(ws) {
-  bleDaemon.on('position', payload => {
-    ws.send('position', payload);
-  });
+  // bleDaemon.on('position', (id, position) => {
+  //   ws.send(
+  //     JSON.stringify({
+  //       event: 'position',
+  //       id,
+  //       position: position
+  //     })
+  //   );
+  // });
 
-  bleDaemon.on('deviceFound', payload => {
-    ws.send('playerIn', payload);
-  });
+  intervalId = setInterval(() => {
+    ws.send(
+      JSON.stringify({
+        event: 'position',
+        positions: bleDaemon.positions
+      })
+    );
+  }, 1000 / FRAME_RATE);
 
-  bleDaemon.on('deviceLost', payload => {
-    ws.send('playerOut', payload);
-  });
-
-  setInterval(() => {
+  bleDaemon.on('deviceFound', id => {
     ws.send(
       JSON.stringify({
         event: 'playerIn',
-        id: 'LOL'
+        id: id
       })
     );
-  }, 5000);
+  });
+
+  bleDaemon.on('deviceLost', id => {
+    ws.send('playerOut', id);
+  });
+
+  ws.on('message', data => {
+    switch (data) {
+      case 'getPlayers':
+        Object.keys(bleDaemon.positions).forEach(id => {
+          ws.send(
+            JSON.stringify({
+              event: 'playerIn',
+              id
+            })
+          );
+        });
+        break;
+
+      default:
+        break;
+    }
+  });
+
+  ws.on('close', () => {
+    bleDaemon.removeAllListeners();
+    clearInterval(intervalId);
+  });
 });

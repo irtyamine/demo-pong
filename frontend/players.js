@@ -1,4 +1,5 @@
 const Paddle = require('./paddle.js');
+const MAX_ABS_SPEED = 3;
 
 function Computer(context, stageWidth, stageHeight, paddleWidth, paddleHeight) {
   this.paddle = new Paddle(
@@ -46,23 +47,40 @@ function Player(
     paddleWidth,
     paddleHeight
   );
+  this.x = stageWidth / 2 - paddleWidth / 2;
 }
 
 Player.prototype.render = function() {
   this.paddle.render();
 };
 
-Player.prototype.update = function(stageWidth, stageHeight) {
-  for (var key in this.keysDown) {
-    var value = Number(key);
-    if (value == 37) {
-      this.paddle.move(-4, 0, stageWidth, stageHeight);
-    } else if (value == 39) {
-      this.paddle.move(4, 0, stageWidth, stageHeight);
-    } else {
-      this.paddle.move(0, 0, stageWidth, stageHeight);
-    }
-  }
+Player.prototype.setXPosition = function(position, stageWidth) {
+  this.x = position * stageWidth;
+  // console.log(`just set player x ${this.x}`);
 };
+
+Player.prototype.update = function(stageWidth, stageHeight) {
+  const speed = computeSpeed(this.paddle.x, this.x);
+
+  // console.log(`paddle speed is ${speed}`);
+  this.paddle.move(speed, 0, stageWidth, stageHeight);
+  // for (var key in this.keysDown) {
+  //   var value = Number(key);
+  //   if (value == 37) {
+  //     this.paddle.move(-4, 0, stageWidth, stageHeight);
+  //   } else if (value == 39) {
+  //     this.paddle.move(4, 0, stageWidth, stageHeight);
+  //   } else {
+  //     this.paddle.move(0, 0, stageWidth, stageHeight);
+  //   }
+  // }
+};
+
+function computeSpeed(origin, destination) {
+  const speed = destination - origin;
+  if (speed > MAX_ABS_SPEED) return MAX_ABS_SPEED;
+  if (speed < MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
+  return speed;
+}
 
 module.exports = { Computer, Player };

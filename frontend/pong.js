@@ -15,7 +15,7 @@ const stageWidth = document.body.offsetWidth;
 const stageHeight = document.body.offsetHeight;
 canvas.width = stageWidth;
 canvas.height = stageHeight;
-const paddleWidth = stageWidth * 0.045;
+const paddleWidth = stageWidth * 0.06;
 const paddleHeight = 10;
 var context = canvas.getContext('2d');
 
@@ -95,7 +95,18 @@ module.exports = {
       paddlePositions[Object.keys(playersById).length]
     );
     playersById[id] = player;
+    return Object.keys(playersById);
   },
   removePlayer: id => {},
-  updatePosition: (id, position) => {}
+  updatePosition: (id, position) => {
+    if (!playersById[id]) {
+      console.warn(`received position for unknown player id ${id}`);
+      return;
+    }
+    // if (id === Object.keys(playersById)[0]) {
+    //   console.log(position);
+    // }
+
+    playersById[id].setXPosition(position, stageWidth);
+  }
 };
