@@ -18,23 +18,18 @@ app.listen(HTTP_PORT, () =>
 );
 
 wss.on('connection', function connection(ws) {
-  // bleDaemon.on('position', (id, position) => {
-  //   ws.send(
-  //     JSON.stringify({
-  //       event: 'position',
-  //       id,
-  //       position: position
-  //     })
-  //   );
-  // });
-
   intervalId = setInterval(() => {
-    ws.send(
-      JSON.stringify({
-        event: 'position',
-        positions: bleDaemon.positions
-      })
-    );
+    if (ws.readyState !== WebSocket.OPEN) {
+      return;
+    }
+    if (Object.keys(bleDaemon.positions).length > 1) {
+      ws.send(
+        JSON.stringify({
+          event: 'position',
+          positions: bleDaemon.positions
+        })
+      );
+    }
   }, 1000 / FRAME_RATE);
 
   bleDaemon.on('deviceFound', id => {
@@ -47,7 +42,12 @@ wss.on('connection', function connection(ws) {
   });
 
   bleDaemon.on('deviceLost', id => {
-    ws.send('playerOut', id);
+    ws.send(
+      JSON.stringify({
+        event: 'playerOut',
+        id: id
+      })
+    );
   });
 
   ws.on('message', data => {

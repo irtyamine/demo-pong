@@ -1,5 +1,5 @@
 const Paddle = require('./paddle.js');
-const MAX_ABS_SPEED = 3;
+const SPEED_FACTOR = 1.12;
 
 function Computer(context, stageWidth, stageHeight, paddleWidth, paddleHeight) {
   this.paddle = new Paddle(
@@ -38,7 +38,8 @@ function Player(
   stageHeight,
   paddleWidth,
   paddleHeight,
-  paddleYPosition
+  paddleYPosition,
+  debug = false
 ) {
   this.paddle = new Paddle(
     stageWidth / 2 - paddleWidth / 2,
@@ -47,39 +48,57 @@ function Player(
     paddleWidth,
     paddleHeight
   );
-  this.x = stageWidth / 2 - paddleWidth / 2;
+  this.xTarget = stageWidth / 2 - paddleWidth / 2;
+  this.y = paddleYPosition;
+  this.xAcceleration = 0;
+  this.debug = debug;
 }
 
 Player.prototype.render = function() {
   this.paddle.render();
 };
 
-Player.prototype.setXPosition = function(position, stageWidth) {
-  this.x = position * stageWidth;
-  // console.log(`just set player x ${this.x}`);
+Player.prototype.setXTarget = function(absolutePosition, stageWidth) {
+  // if (Math.abs(this.xTarget - absolutePosition * stageWidth) < 40) {
+  //   return;
+  // }
+  this.xTarget = (1 - absolutePosition) * stageWidth;
+  // this.xAcceleration = computeAcceleration(this.paddle.x, this.xTarget);
 };
 
 Player.prototype.update = function(stageWidth, stageHeight) {
-  const speed = computeSpeed(this.paddle.x, this.x);
+  // const speed = computeSpeed(this.paddle.x_speed, this.xAcceleration);
+  // this.xAcceleration = decreaseAcceleration(this.xAcceleration);
 
+  var speed = computeSpeed(this.paddle.x, this.xTarget);
+  if (this.debug) {
+    console.log(`t: ${this.xTarget}, p: ${this.paddle.x}, s: ${speed}`);
+  }
+  this.paddle.x_speed = speed;
   // console.log(`paddle speed is ${speed}`);
-  this.paddle.move(speed, 0, stageWidth, stageHeight);
-  // for (var key in this.keysDown) {
-  //   var value = Number(key);
-  //   if (value == 37) {
-  //     this.paddle.move(-4, 0, stageWidth, stageHeight);
-  //   } else if (value == 39) {
-  //     this.paddle.move(4, 0, stageWidth, stageHeight);
-  //   } else {
-  //     this.paddle.move(0, 0, stageWidth, stageHeight);
-  //   }
-  // }
+  this.paddle.update(stageWidth, stageHeight);
 };
 
-function computeSpeed(origin, destination) {
-  const speed = destination - origin;
-  if (speed > MAX_ABS_SPEED) return MAX_ABS_SPEED;
-  if (speed < MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
+function computeAcceleration(origin, destination) {
+  const distance = destination - origin;
+  return distance;
+}
+
+function decreaseAcceleration(currentAcceleration) {
+  const newAcceleration = currentAcceleration / 4;
+  if (newAcceleration < 5) {
+    return 0;
+  }
+  return newAcceleration;
+}
+
+function computeSpeed(pos, target) {
+  const abs = Math.abs;
+  const delta = target - pos;
+  const sign = delta === 0 ? 1 : delta / abs(delta);
+  const speed = SPEED_FACTOR * Math.log(abs(delta) + 1) * sign;
+  // if (speed >= MAX_ABS_SPEED) return MAX_ABS_SPEED;
+  // if (speed <= MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
   return speed;
 }
 

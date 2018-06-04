@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/kuzzleio/demo-pong#readme",
   "dependencies": {
+    "array-difference": "0.0.1",
     "binary": "^0.3.0",
     "bufferutil": "^3.0.1",
     "express": "^4.15.3",

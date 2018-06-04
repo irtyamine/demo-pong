@@ -1,3 +1,5 @@
+const SPEED_VARIATION = 1.1;
+
 function Ball(x, y, context, onBallOutBottom, onBallOutTop) {
   this.context = context;
   this.x = x;
@@ -52,8 +54,8 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
       top_x < paddle1.x + paddle1.width &&
       bottom_x > paddle1.x
     ) {
-      this.y_speed = -3;
-      this.x_speed += paddle1.x_speed / 2;
+      this.y_speed *= -(SPEED_VARIATION + Math.abs(paddle1.x_speed) / 10);
+      this.x_speed += paddle1.x_speed / 2 + Math.random();
       this.y += this.y_speed;
     }
   } else {
@@ -63,8 +65,8 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
       top_x < paddle2.x + paddle2.width &&
       bottom_x > paddle2.x
     ) {
-      this.y_speed = 3;
-      this.x_speed += paddle2.x_speed / 2;
+      this.y_speed *= -(SPEED_VARIATION + Math.abs(paddle2.x_speed) / 10);
+      this.x_speed += paddle2.x_speed / 2 + Math.random();
       this.y += this.y_speed;
     }
   }

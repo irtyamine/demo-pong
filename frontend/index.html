@@ -8,8 +8,8 @@
 
   <div id="pong">
     <div v-for="(score, index) in scores" :key="`score-${index}`" :id="`score-player-${index + 1}`" class="score">{{ score }}</div>
-    <!-- <div v-for="(position, key, index) in positions" :key="`position-${key}`" :id="`position-player-${index + 1}`" class="position">{{ position }}</div> -->
-    <div ref="pongContainer"></div>
+    <!-- <div v-for="(speed, key, index) in speeds" :key="`position-${key}`" :id="`position-player-${index + 1}`" class="position">{{ speed }}</div> -->
+    <div ref="pongContainer" v-bind:class="{nocursor: isPlaying}"></div>
 
     <div class="splash" v-if="!isPlaying">
       <h1>Welcome to Pong</h1>
@@ -18,8 +18,8 @@
       <p v-show="!arePlayersConnected">Waiting for players to connect...</p>
       <p></p>
       <div>
-        <span class="player-indicator" v-bind:class="{connected: connectedPlayer1}">Player 1</span>
-        <span class="player-indicator" v-bind:class="{connected: connectedPlayer2}">Player 2</span>
+        <span class="player-indicator" v-bind:class="{connected: connectedPlayer1}">Player 1 (top)</span>
+        <span class="player-indicator" v-bind:class="{connected: connectedPlayer2}">Player 2 (bottom)</span>
       </div>
     </div>
   </div>

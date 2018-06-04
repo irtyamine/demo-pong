@@ -10,6 +10,7 @@ class BLERemoteDaemon extends EventEmitter {
     console.log('-- Kuzzle Pong BLE remote daemon --------------');
 
     this.positions = {};
+    this.timers = {};
     noble.on('stateChange', this.onBLEAdapterStateChanged);
     noble.on('discover', this.onBLEDeviceDiscovered.bind(this));
   }
@@ -38,17 +39,21 @@ class BLERemoteDaemon extends EventEmitter {
         .word16lu('position').vars;
 
       const devId = vars.deviceId.toString('hex');
+      // console.log(
+      //   `[DEBUG] ManufacturerId: ${
+      //     vars.manufacturerID
+      //   }, DevId: ${devId}, DevSKU: ${vars.deviceSKU}`
+      // );
       if (vars.manufacturerID == 0x6012 && vars.deviceSKU === 2) {
+        // console.log(`[DEBUG] DevId: ${devId}`);
         const pos = vars.position / MAX_POSITION;
         if (typeof this.positions[devId] === 'undefined') {
-          this.positions[devId] = {
-            position: pos,
-            timeoutId: null
-          };
+          this.positions[devId] = pos;
           this.emit('deviceFound', devId);
+          console.log(`found device ${devId}`);
         } else {
-          if (this.positions[devId].position != pos) {
-            this.positions[devId].position = pos;
+          if (this.positions[devId] != pos) {
+            this.positions[devId] = pos;
             this.emit('position', devId, pos);
             // if (devId === Object.keys(this.positions)[0]) {
             // console.log(`position (${devId}) = ${pos}`);
@@ -56,17 +61,18 @@ class BLERemoteDaemon extends EventEmitter {
           }
         }
         this.resetDeviceTimeout(devId);
-        // TODO handle device disconnection
       }
     }
   }
   resetDeviceTimeout(devId) {
-    if (this.positions[devId].timeoutId) {
-      clearTimeout(this.positions[devId].timeoutId);
+    if (this.timers[devId]) {
+      clearTimeout(this.timers[devId]);
     }
-    this.positions[devId].timeoutId = setTimeout(() => {
+    this.timers[devId] = setTimeout(() => {
+      delete this.timers[devId];
       delete this.positions[devId];
       this.emit('deviceLost', devId);
+      console.log(`lost device ${devId}`);
     }, DEVICE_TIMEOUT);
   }
 }

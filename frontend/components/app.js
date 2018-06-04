@@ -11,7 +11,7 @@ function precise(x, precision) {
 new Vue({
   el: '#pong',
   data: {
-    playerIds: [],
+    playersByPosition: [],
     scores: [0, 0],
     positions: {},
     isPlaying: false
@@ -26,10 +26,17 @@ new Vue({
     },
     addPlayer(id) {
       const ids = pong.addPlayer(id);
-      this.playerIds = ids;
+      if (!ids) {
+        console.warn(`unable to add device ${id} to the player list`);
+      }
+      this.playersByPosition = ids;
     },
     removePlayer(id) {
-      // TODO
+      const ids = pong.removePlayer(id);
+      this.playersByPosition = ids;
+      if (this.isPlaying) {
+        this.togglePlaying();
+      }
     },
     updatePosition(positions) {
       if (!this.arePlayersConnected) {
@@ -46,10 +53,10 @@ new Vue({
       return this.connectedPlayer1 && this.connectedPlayer2;
     },
     connectedPlayer1() {
-      return this.playerIds[0] != undefined;
+      return this.playersByPosition.top != undefined;
     },
     connectedPlayer2() {
-      return this.playerIds[1] != undefined;
+      return this.playersByPosition.bottom != undefined;
     }
   },
   beforeDestroy() {

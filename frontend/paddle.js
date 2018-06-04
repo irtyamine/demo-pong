@@ -13,15 +13,13 @@ Paddle.prototype.render = function() {
   this.context.fillRect(this.x, this.y, this.width, this.height);
 };
 
-Paddle.prototype.setXPosition = function(pos, stageWidth) {
+Paddle.prototype.setX = function(pos, stageWidth) {
   this.x = pos * stageWidth;
 };
 
-Paddle.prototype.move = function(x, y, stageWidth, stageHeight) {
-  this.x += x;
-  this.y += y;
-  // this.x_speed = x;
-  // this.y_speed = y;
+Paddle.prototype.update = function(stageWidth, stageHeight) {
+  this.x += this.x_speed;
+  this.y += this.y_speed;
   if (this.x < 0) {
     this.x = 0;
     this.x_speed = 0;
