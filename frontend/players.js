@@ -1,5 +1,5 @@
 const Paddle = require('./paddle.js');
-const SPEED_FACTOR = 1.12;
+const SPEED_FACTOR = 2;
 const INERTIA = 0.2;
 const MAX_ABS_SPEED = 15;
 
@@ -71,6 +71,7 @@ Player.prototype.update = function(stageWidth, stageHeight) {
     this.paddle.x_speed
   );
   var speed = computeSpeed(this.paddle.x_speed, this.xAcceleration);
+  // const speed = computeSpeed(this.paddle.x, this.xTarget);
   if (this.debug) {
     console.log(`t: ${this.xTarget}, p: ${this.paddle.x}, s: ${speed}`);
   }
@@ -95,8 +96,6 @@ function computeSpeed(currentSpeed, currentAcceleration) {
 //   const delta = target - pos;
 //   const sign = delta === 0 ? 1 : delta / abs(delta);
 //   const speed = SPEED_FACTOR * Math.log2(abs(delta) + 1) * sign;
-//   // if (speed >= MAX_ABS_SPEED) return MAX_ABS_SPEED;
-//   // if (speed <= MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
 //   return speed;
 // }
 

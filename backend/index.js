@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
-const WebSocket = require('ws');
+const WebSocket = require('uws');
 const bleDaemon = require('./ble-remote-daemon');
 
 const HTTP_PORT = 1234;
 const WS_PORT = 8080;
-const FRAME_RATE = 60;
+const FRAME_RATE = 120;
 
 var intervalId;
 const wss = new WebSocket.Server({ port: WS_PORT });
