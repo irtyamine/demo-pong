@@ -1,5 +1,7 @@
 const Paddle = require('./paddle.js');
 const SPEED_FACTOR = 1.12;
+const INERTIA = 0.2;
+const MAX_ABS_SPEED = 15;
 
 function Computer(context, stageWidth, stageHeight, paddleWidth, paddleHeight) {
   this.paddle = new Paddle(
@@ -59,47 +61,43 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.setXTarget = function(absolutePosition, stageWidth) {
-  // if (Math.abs(this.xTarget - absolutePosition * stageWidth) < 40) {
-  //   return;
-  // }
-  this.xTarget = (1 - absolutePosition) * stageWidth;
-  // this.xAcceleration = computeAcceleration(this.paddle.x, this.xTarget);
+  this.xTarget = (1 - absolutePosition) * (stageWidth - this.paddle.width);
 };
 
 Player.prototype.update = function(stageWidth, stageHeight) {
-  // const speed = computeSpeed(this.paddle.x_speed, this.xAcceleration);
-  // this.xAcceleration = decreaseAcceleration(this.xAcceleration);
-
-  var speed = computeSpeed(this.paddle.x, this.xTarget);
+  this.xAcceleration = computeAcceleration(
+    this.paddle.x,
+    this.xTarget,
+    this.paddle.x_speed
+  );
+  var speed = computeSpeed(this.paddle.x_speed, this.xAcceleration);
   if (this.debug) {
     console.log(`t: ${this.xTarget}, p: ${this.paddle.x}, s: ${speed}`);
   }
   this.paddle.x_speed = speed;
-  // console.log(`paddle speed is ${speed}`);
   this.paddle.update(stageWidth, stageHeight);
 };
 
-function computeAcceleration(origin, destination) {
+function computeAcceleration(origin, destination, currentSpeed) {
   const distance = destination - origin;
-  return distance;
+  return distance - currentSpeed;
 }
 
-function decreaseAcceleration(currentAcceleration) {
-  const newAcceleration = currentAcceleration / 4;
-  if (newAcceleration < 5) {
-    return 0;
-  }
-  return newAcceleration;
-}
-
-function computeSpeed(pos, target) {
-  const abs = Math.abs;
-  const delta = target - pos;
-  const sign = delta === 0 ? 1 : delta / abs(delta);
-  const speed = SPEED_FACTOR * Math.log(abs(delta) + 1) * sign;
-  // if (speed >= MAX_ABS_SPEED) return MAX_ABS_SPEED;
-  // if (speed <= MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
+function computeSpeed(currentSpeed, currentAcceleration) {
+  const speed = (currentSpeed + currentAcceleration) * INERTIA;
+  if (speed >= MAX_ABS_SPEED) return MAX_ABS_SPEED;
+  if (speed <= MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
   return speed;
 }
+
+// function computeSpeed(pos, target) {
+//   const abs = Math.abs;
+//   const delta = target - pos;
+//   const sign = delta === 0 ? 1 : delta / abs(delta);
+//   const speed = SPEED_FACTOR * Math.log2(abs(delta) + 1) * sign;
+//   // if (speed >= MAX_ABS_SPEED) return MAX_ABS_SPEED;
+//   // if (speed <= MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
+//   return speed;
+// }
 
 module.exports = { Computer, Player };

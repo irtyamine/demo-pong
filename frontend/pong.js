@@ -13,7 +13,7 @@ const animate =
 
 const stageWidth = document.body.offsetWidth;
 const stageHeight = document.body.offsetHeight;
-const paddleWidth = stageWidth * 0.06;
+const paddleWidth = stageWidth * 0.09;
 const paddleHeight = 10;
 const paddleYPositions = {
   bottom: stageHeight - paddleHeight * 2,
@@ -81,6 +81,7 @@ function initBall(incrementFunction) {
     stageWidth / 2,
     stageHeight / 2,
     context,
+    10,
     () => {
       incrementFunction(0);
     },

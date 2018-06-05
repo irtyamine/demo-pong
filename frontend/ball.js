@@ -1,18 +1,19 @@
 const SPEED_VARIATION = 1.1;
 
-function Ball(x, y, context, onBallOutBottom, onBallOutTop) {
+function Ball(x, y, context, radius, onBallOutBottom, onBallOutTop) {
   this.context = context;
   this.x = x;
   this.y = y;
   this.x_speed = 0;
   this.y_speed = 3;
+  this.radius = radius;
   this.onBallOutBottom = onBallOutBottom;
   this.onBallOutTop = onBallOutTop;
 }
 
 Ball.prototype.render = function() {
   this.context.beginPath();
-  this.context.arc(this.x, this.y, 5, 2 * Math.PI, false);
+  this.context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
   this.context.fillStyle = '#FFFFFF';
   this.context.fill();
 };
@@ -20,16 +21,16 @@ Ball.prototype.render = function() {
 Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
   this.x += this.x_speed;
   this.y += this.y_speed;
-  var top_x = this.x - 5;
-  var top_y = this.y - 5;
-  var bottom_x = this.x + 5;
-  var bottom_y = this.y + 5;
+  var top_x = this.x - this.radius;
+  var top_y = this.y - this.radius;
+  var bottom_x = this.x + this.radius;
+  var bottom_y = this.y + this.radius;
 
-  if (this.x - 5 < 0) {
-    this.x = 5;
+  if (this.x - this.radius < 0) {
+    this.x = this.radius;
     this.x_speed = -this.x_speed;
-  } else if (this.x + 5 > stageWidth) {
-    this.x = stageWidth - 5;
+  } else if (this.x + this.radius > stageWidth) {
+    this.x = stageWidth - this.radius;
     this.x_speed = -this.x_speed;
   }
 
