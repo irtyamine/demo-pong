@@ -1,7 +1,7 @@
 const SPEED_FACTOR = 1;
 const INITIAL_SPEED = 5;
 const PADDLE_SPEED_DIVIDEND = 14;
-const MAX_ABS_SPEED = 20;
+const MAX_ABS_SPEED = 15;
 
 function Ball(x, y, context, radius, onBallOutBottom, onBallOutTop) {
   this.context = context;
@@ -75,6 +75,7 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
     }
   }
   this.y_speed = this.capSpeed(this.y_speed);
+  this.x_speed = this.capSpeed(this.x_speed);
 };
 
 Ball.prototype.computeSpeedFactor = function(paddleSpeed) {
