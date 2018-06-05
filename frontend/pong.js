@@ -24,7 +24,6 @@ const canvas = document.createElement('canvas');
 canvas.width = stageWidth;
 canvas.height = stageHeight;
 var context = canvas.getContext('2d');
-
 var playing = false;
 var playersById = {};
 var playersByPosition = { top: null, bottom: null };
@@ -33,9 +32,10 @@ var ball = undefined;
 var render = function() {
   context.fillStyle = '#383838';
   context.fillRect(0, 0, stageWidth, stageHeight);
-  Object.keys(playersById).forEach(playerId => {
-    playersById[playerId].render();
-  });
+  const keys = Object.keys(playersById);
+  for (let i = 0; i < keys.length; i++) {
+    playersById[keys[i]].render();
+  }
   if (ball) {
     ball.render();
   }
@@ -62,7 +62,6 @@ var update = function() {
 };
 
 var step = function() {
-  update();
   render();
   if (playing) {
     animate(step);
@@ -75,6 +74,10 @@ function setPlaying(value) {
     animate(step);
   }
 }
+
+setInterval(() => {
+  update();
+}, 1000 / 60);
 
 function initBall(incrementFunction) {
   ball = new Ball(
@@ -92,14 +95,6 @@ function initBall(incrementFunction) {
 }
 
 function allocatePlayerYPosition() {
-  // const takenPositions = Object.keys(playersById).map(player => {
-  //   return playersById[player].y;
-  // });
-  // const availablePositions = difference(takenPositions, paddleYPositions);
-  // if (availablePositions.length === 0) {
-  //   return null;
-  // }
-  // return availablePositions[0];
   if (playersByPosition.top === null) {
     return 'top';
   }

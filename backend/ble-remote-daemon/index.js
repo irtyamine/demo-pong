@@ -45,20 +45,14 @@ class BLERemoteDaemon extends EventEmitter {
       //   }, DevId: ${devId}, DevSKU: ${vars.deviceSKU}`
       // );
       if (vars.manufacturerID == 0x6012 && vars.deviceSKU === 2) {
-        // console.log(`[DEBUG] DevId: ${devId}`);
         const pos = vars.position / MAX_POSITION;
         if (typeof this.positions[devId] === 'undefined') {
           this.positions[devId] = pos;
           this.emit('deviceFound', devId);
           console.log(`found device ${devId}`);
         } else {
-          // if (Math.abs(this.positions[devId] - pos) < 0.001) {
-            this.positions[devId] = pos;
-            // this.emit('position', devId, pos);
-            // if (devId === Object.keys(this.positions)[0]) {
-            console.log(`position (${devId}) = ${pos}`);
-            // }
-          // }
+          this.positions[devId] = pos;
+          // console.log(`position (${devId}) = ${pos}`);
         }
         this.resetDeviceTimeout(devId);
       }
