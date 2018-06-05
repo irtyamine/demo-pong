@@ -1,6 +1,7 @@
 const SPEED_FACTOR = 1;
 const INITIAL_SPEED = 5;
 const PADDLE_SPEED_DIVIDEND = 14;
+const MAX_ABS_SPEED = 20;
 
 function Ball(x, y, context, radius, onBallOutBottom, onBallOutTop) {
   this.context = context;
@@ -57,10 +58,7 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
       top_x < paddle1.x + paddle1.width &&
       bottom_x > paddle1.x
     ) {
-      this.y_speed *= -(
-        SPEED_FACTOR +
-        Math.abs(paddle1.x_speed) / PADDLE_SPEED_DIVIDEND
-      );
+      this.y_speed *= this.computeSpeedFactor(paddle1.x_speed);
       this.x_speed += paddle1.x_speed / 2 + Math.random();
       this.y += this.y_speed;
     }
@@ -71,14 +69,22 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
       top_x < paddle2.x + paddle2.width &&
       bottom_x > paddle2.x
     ) {
-      this.y_speed *= -(
-        SPEED_FACTOR +
-        Math.abs(paddle2.x_speed) / PADDLE_SPEED_DIVIDEND
-      );
+      this.y_speed *= this.computeSpeedFactor(paddle2.x_speed);
       this.x_speed += paddle2.x_speed / 2 + Math.random();
       this.y += this.y_speed;
     }
   }
+  this.y_speed = this.capSpeed(this.y_speed);
+};
+
+Ball.prototype.computeSpeedFactor = function(paddleSpeed) {
+  return -(SPEED_FACTOR + Math.abs(paddleSpeed) / PADDLE_SPEED_DIVIDEND);
+};
+
+Ball.prototype.capSpeed = function(speed) {
+  if (speed >= MAX_ABS_SPEED) return MAX_ABS_SPEED;
+  if (speed <= MAX_ABS_SPEED * -1) return MAX_ABS_SPEED * -1;
+  return speed;
 };
 
 Ball.prototype.resetBall = function(stageWidth, stageHeight) {

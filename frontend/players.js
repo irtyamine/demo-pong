@@ -1,7 +1,7 @@
 const Paddle = require('./paddle.js');
 const SPEED_FACTOR = 2;
 const INERTIA = 0.2;
-const MAX_ABS_SPEED = 15;
+const MAX_ABS_SPEED = 20;
 
 function Computer(context, stageWidth, stageHeight, paddleWidth, paddleHeight) {
   this.paddle = new Paddle(

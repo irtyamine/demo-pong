@@ -76,7 +76,9 @@ function setPlaying(value) {
 }
 
 setInterval(() => {
-  update();
+  if (playing) {
+    update();
+  }
 }, 1000 / 60);
 
 function initBall(incrementFunction) {
