@@ -98,27 +98,27 @@ static void _publish_state(uint16_t position)
 
         memcpy(p + offset,
                &KUZZLE_BLE_ID,
-               sizeof(KUZZLE_BLE_ID)); 
+               sizeof(KUZZLE_BLE_ID));
         offset += sizeof(KUZZLE_BLE_ID);
 
         memcpy(p + offset,
                &KUZZLE_DEVICE_SKU,
-               sizeof(KUZZLE_DEVICE_SKU)); 
+               sizeof(KUZZLE_DEVICE_SKU));
         offset += sizeof(KUZZLE_DEVICE_SKU);
 
-        memcpy(p + offset, &v_major, sizeof(v_major)); 
+        memcpy(p + offset, &v_major, sizeof(v_major));
         offset += sizeof(v_major);
 
-        memcpy(p + offset, &v_minor, sizeof(v_minor)); 
+        memcpy(p + offset, &v_minor, sizeof(v_minor));
         offset += sizeof(v_minor);
 
-        memcpy(p + offset, &v_patch, sizeof(v_patch)); 
+        memcpy(p + offset, &v_patch, sizeof(v_patch));
         offset += sizeof(v_patch);
 
-        memcpy(p + offset, &_device_id_raw, sizeof(_device_id_raw)); 
+        memcpy(p + offset, &_device_id_raw, sizeof(_device_id_raw));
         offset += sizeof(_device_id_raw);
 
-        memcpy(p + offset, &position, sizeof(position)); 
+        memcpy(p + offset, &position, sizeof(position));
         offset += sizeof(position);
 
         adv_data_state[0] = offset + 1;
@@ -160,7 +160,7 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
 
             if (param->adv_start_cmpl.status != ESP_BT_STATUS_SUCCESS) {
                 ESP_LOGE(TAG, "Advertising start failed");
-            } 
+            }
             break;
         default:
             break;
@@ -245,9 +245,9 @@ void app_main(void)
     adc1_config_width(ADC_WIDTH_12Bit);
     adc1_config_channel_atten(ADC1_GPIO32_CHANNEL, ADC_ATTEN_11db);
 
-    float p0, p1;
-    float factor = 0.9;
-    p0 = adc1_get_raw(ADC1_GPIO32_CHANNEL);
+    float p1;
+    TickType_t xLastWakeTime = xTaskGetTickCount();
+
     while (true) {
         // Read ADC and obtain result in mV
 
@@ -258,12 +258,8 @@ void app_main(void)
 
         p1/=4;
 
-        p0 = factor *p0 + (1.0f-factor) * p1;
+       _publish_state((uint16_t)round(p1));
 
-       _publish_state((uint16_t)round(p0));
-
-        ESP_LOGD(TAG, "Position = %2f", p0);
-
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelayUntil(&xLastWakeTime, 10 / portTICK_PERIOD_MS);
     }
 }

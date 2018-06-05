@@ -216,7 +216,7 @@ void dis_set_manufacturer_name(const char* manufacturer_name)
  */
 void dis_set_hardware_revision(const char* hardware_revision)
 {
-    ESP_LOGD(TAG, "Hardware revision %s", hardware_revision)
+    ESP_LOGD(TAG, "Hardware revision %s", hardware_revision);
     _set_char_attr(&_dis_data.hardware_revision, hardware_revision);
 }
 
@@ -226,7 +226,7 @@ void dis_set_hardware_revision(const char* hardware_revision)
  */
 void dis_software_revision(const char* software_revision)
 {
-    ESP_LOGD(TAG, "Hardware revision %s", software_revision)
+    ESP_LOGD(TAG, "Hardware revision %s", software_revision);
     _set_char_attr(&_dis_data.software_revision, software_revision);
 }
 
@@ -236,7 +236,7 @@ void dis_software_revision(const char* software_revision)
  */
 void dis_set_firmware_revision(const char* firmware_revision)
 {
-    ESP_LOGD(TAG, "Firmware revision %s", firmware_revision)
+    ESP_LOGD(TAG, "Firmware revision %s", firmware_revision);
     _set_char_attr(&_dis_data.firmware_revision, firmware_revision);
 }
 
