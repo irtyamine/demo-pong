@@ -7,6 +7,7 @@
 <body class="noisy">
 
   <div id="pong">
+    <audio src="assets/pong_song.mp3" ref="music" loop="true"></audio>
     <div v-for="(score, index) in scores" :key="`score-${index}`" :id="`score-player-${index + 1}`" class="score">{{ score }}</div>
     <!-- <div v-for="(speed, key, index) in speeds" :key="`position-${key}`" :id="`position-player-${index + 1}`" class="position">{{ speed }}</div> -->
     <div ref="pongContainer" v-bind:class="{nocursor: isPlaying}"></div>

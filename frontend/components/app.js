@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import pong from '../pong';
-import ReconnectingWebSocket from 'ReconnectingWebSocket'
+import ReconnectingWebSocket from 'ReconnectingWebSocket';
 import Vue from 'vue/dist/vue.esm.js';
 
 window.ws = undefined;
@@ -60,16 +60,37 @@ new Vue({
       return this.playersByPosition.bottom != undefined;
     }
   },
+  watch: {
+    isPlaying(value) {
+      if (value === true) {
+        this.$refs.music.play();
+      }
+
+      if (value === false) {
+        this.$refs.music.pause();
+      }
+    }
+  },
   beforeDestroy() {
     window.ws.close();
   },
   mounted() {
+    this.$refs.music.volume = 0;
     window.addEventListener('keydown', event => {
       if (event.keyCode === 32) {
         if (!this.arePlayersConnected) {
           return;
         }
         this.togglePlaying();
+      }
+      if (event.keyCode === 83) {
+        if (this.$refs.music.volume > 0) {
+          console.log('sound off');
+          this.$refs.music.volume = 0;
+        } else {
+          console.log('sound on');
+          this.$refs.music.volume = 1;
+        }
       }
     });
 
