@@ -4,6 +4,7 @@ const EventEmitter = require('events');
 
 const DEVICE_TIMEOUT = 2000;
 const MAX_POSITION = 4095;
+
 class BLERemoteDaemon extends EventEmitter {
   constructor() {
     super();

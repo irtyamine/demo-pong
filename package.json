@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/kuzzleio/demo-pong#readme",
   "dependencies": {
+    "ReconnectingWebSocket": "git+https://github.com/joewalnes/reconnecting-websocket.git",
     "array-difference": "0.0.1",
     "binary": "^0.3.0",
     "bufferutil": "^3.0.1",

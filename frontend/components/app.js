@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import Vue from 'vue/dist/vue.esm.js';
 import pong from '../pong';
+import ReconnectingWebSocket from 'ReconnectingWebSocket'
+import Vue from 'vue/dist/vue.esm.js';
 
 window.ws = undefined;
 
@@ -74,7 +75,9 @@ new Vue({
 
     pong.init(this.$refs.pongContainer, this.incrementScore);
 
-    window.ws = new WebSocket('ws://localhost:8080');
+    window.ws = new ReconnectingWebSocket('ws://localhost:8080', null, {
+      debug: true
+    });
     window.ws.onmessage = message => {
       const parsed = JSON.parse(message.data);
 
