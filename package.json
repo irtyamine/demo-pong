@@ -5,7 +5,9 @@
   "main": "backend/index.js",
   "scripts": {
     "start": "node backend/index.js",
-    "daemon": "sudo node backend/ble-remote-daemon/index.js"
+    "daemon": "sudo node backend/ble-remote-daemon/index.js",
+    "build-frontend": "cd frontend && parcel build index.html",
+    "dev-frontend": "cd frontend && parcel watch index.html"
   },
   "repository": {
     "type": "git",

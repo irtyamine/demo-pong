@@ -27,12 +27,13 @@
     <div id="high-scores" class="screen"></div>
     <div id="enter-player-name" v-show="!isPlaying && gameEnd" class="screen">
       <h1>Player {{winnerIndex + 1}} wins</h1>
-      <p>Enter player name:</p>
+      <!-- <p>Enter player name:</p>
       <p>
         <input type="text" value="" maxlength="3">
       </p>
       <p>
-        <input type="button" @click="submitWinner" value="SAVE">
+        <input type="button" @click="submitWinner" value="SAVE"> -->
+      <p>
         <input type="button" @click="resetScores" value="BACK">
       </p>
 

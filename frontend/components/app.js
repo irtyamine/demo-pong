@@ -14,7 +14,7 @@ new Vue({
   el: '#pong',
   data: {
     playersByPosition: [],
-    scores: [0, 0],
+    scores: [5, 0],
     positions: {},
     isPlaying: false,
     winnerName: ''
@@ -26,13 +26,12 @@ new Vue({
     },
     incrementScore(player) {
       this.$set(this.scores, player, this.scores[player] + 1);
-      if (this.gameEnd()) {
-        this.togglePlaying();
+      if (this.scores[player] >= MAX_SCORE) {
+        this.isPlaying = false;
       }
     },
     togglePlaying() {
       this.isPlaying = !this.isPlaying;
-      pong.setPlaying(this.isPlaying);
     },
     addPlayer(id) {
       const ids = pong.addPlayer(id);
@@ -82,6 +81,8 @@ new Vue({
   },
   watch: {
     isPlaying(value) {
+      pong.setPlaying(value);
+
       if (value === true) {
         this.$refs.music.play();
       }
