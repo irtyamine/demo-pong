@@ -14,7 +14,7 @@ new Vue({
   el: '#pong',
   data: {
     playersByPosition: [],
-    scores: [5, 0],
+    scores: [0, 0],
     positions: {},
     isPlaying: false,
     winnerName: ''

@@ -38,14 +38,14 @@ Ball.prototype.update = function(paddle1, paddle2, stageWidth, stageHeight) {
   }
 
   if (this.y < 0) {
-    this.resetBall(stageWidth, stageHeight);
+    this.resetBall(stageWidth, stageHeight, 1);
     if (this.onBallOutTop) {
       this.onBallOutTop();
     }
   }
 
   if (this.y > stageHeight) {
-    this.resetBall(stageWidth, stageHeight);
+    this.resetBall(stageWidth, stageHeight, -1);
     if (this.onBallOutBottom) {
       this.onBallOutBottom();
     }
@@ -88,9 +88,9 @@ Ball.prototype.capSpeed = function(speed) {
   return speed;
 };
 
-Ball.prototype.resetBall = function(stageWidth, stageHeight) {
+Ball.prototype.resetBall = function(stageWidth, stageHeight, direction = 1) {
   this.x_speed = 0;
-  this.y_speed = INITIAL_SPEED;
+  this.y_speed = INITIAL_SPEED * direction;
   this.x = stageWidth / 2;
   this.y = stageHeight / 2;
 };
