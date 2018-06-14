@@ -32,5 +32,8 @@
   },
   "devDependencies": {
     "less": "^3.0.4"
-  }
+  },
+  "browserslist": [
+    "chrome 67"
+  ]
 }

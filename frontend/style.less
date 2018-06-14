@@ -34,7 +34,7 @@ body {
   cursor: none;
 }
 
-.splash {
+.screen {
   position: absolute;
   top: 0;
   z-index: 0;
@@ -45,6 +45,35 @@ body {
   justify-content: center;
   height: 100%;
   width: 100%;
+
+  input[type='text'] {
+    background: transparent;
+    border-width: 0 0 2px 0;
+    border-color: @console-color;
+    width: 250px;
+    font-family: '8BIT-WONDER-Nominal';
+    color: @console-color;
+    font-size: 3em;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  input[type='button'] {
+    background: transparent;
+    border-width: 2px;
+    border-color: @console-color;
+    // width: 250px;
+    font-family: '8BIT-WONDER-Nominal';
+    color: @console-color;
+    font-size: 2em;
+    padding: 30px;
+
+    &:hover {
+      background: @console-bg;
+    }
+  }
 
   .player-indicator {
     border: dashed 2px;

@@ -1,13 +1,14 @@
-import _ from 'lodash';
+// import Kuzzle from 'kuzzle-sdk/src/Kuzzle';
 import pong from '../pong';
 import ReconnectingWebSocket from 'ReconnectingWebSocket';
 import Vue from 'vue/dist/vue.esm.js';
 
 window.ws = undefined;
+const MAX_SCORE = 5;
+// const KUZZLE_INDEX_NAME = 'pong';
+// const KUZZLE_COLLECTION_NAME = 'wins';
 
-function precise(x, precision) {
-  return Number.parseFloat(x).toPrecision(precision);
-}
+// const kuzzle = new Kuzzle('localhost', { protocol: 'http' });
 
 new Vue({
   el: '#pong',
@@ -15,11 +16,19 @@ new Vue({
     playersByPosition: [],
     scores: [0, 0],
     positions: {},
-    isPlaying: false
+    isPlaying: false,
+    winnerName: ''
   },
   methods: {
+    resetScores() {
+      this.$set(this.scores, 0, 0);
+      this.$set(this.scores, 1, 0);
+    },
     incrementScore(player) {
       this.$set(this.scores, player, this.scores[player] + 1);
+      if (this.gameEnd()) {
+        this.togglePlaying();
+      }
     },
     togglePlaying() {
       this.isPlaying = !this.isPlaying;
@@ -47,6 +56,9 @@ new Vue({
       Object.keys(positions).forEach(playerId => {
         pong.updatePosition(playerId, positions[playerId]);
       });
+    },
+    submitWinner() {
+      this.resetScores();
     }
   },
   computed: {
@@ -58,6 +70,14 @@ new Vue({
     },
     connectedPlayer2() {
       return this.playersByPosition.bottom != undefined;
+    },
+    gameEnd() {
+      return this.scores[0] >= MAX_SCORE || this.scores[1] >= MAX_SCORE;
+    },
+    winnerIndex() {
+      return this.scores.findIndex(score => {
+        return score >= MAX_SCORE;
+      });
     }
   },
   watch: {
@@ -74,7 +94,7 @@ new Vue({
   beforeDestroy() {
     window.ws.close();
   },
-  mounted() {
+  async mounted() {
     this.$refs.music.volume = 0;
     window.addEventListener('keydown', event => {
       if (event.keyCode === 32) {
@@ -124,5 +144,20 @@ new Vue({
     window.ws.onopen = () => {
       window.ws.send('getPlayers');
     };
+
+    // await kuzzle.connect();
+
+    // const indexExists = await kuzzle.index.exists(KUZZLE_INDEX_NAME);
+    // console.log(indexExists);
+    // if (!indexExists) {
+    //   await kuzzle.index.create(KUZZLE_INDEX_NAME);
+    // }
+    // const collectionExists = await kuzzle.collection.exists(
+    //   KUZZLE_INDEX_NAME,
+    //   KUZZLE_COLLECTION_NAME
+    // );
+    // if (!collectionExists) {
+    //   await kuzzle.collection.create(KUZZLE_INDEX_NAME, KUZZLE_COLLECTION_NAME);
+    // }
   }
 });

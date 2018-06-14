@@ -12,7 +12,7 @@
     <!-- <div v-for="(speed, key, index) in speeds" :key="`position-${key}`" :id="`position-player-${index + 1}`" class="position">{{ speed }}</div> -->
     <div ref="pongContainer" v-bind:class="{nocursor: isPlaying}"></div>
 
-    <div class="splash" v-if="!isPlaying">
+    <div id="splash" class="screen" v-show="!isPlaying && !gameEnd">
       <h1>Welcome to Pong</h1>
       <p></p>
       <p v-show="arePlayersConnected">Press &lt;spacebar&gt; to play</p>
@@ -22,6 +22,20 @@
         <span class="player-indicator" v-bind:class="{connected: connectedPlayer1}">Player 1 (top)</span>
         <span class="player-indicator" v-bind:class="{connected: connectedPlayer2}">Player 2 (bottom)</span>
       </div>
+    </div>
+
+    <div id="high-scores" class="screen"></div>
+    <div id="enter-player-name" v-show="!isPlaying && gameEnd" class="screen">
+      <h1>Player {{winnerIndex + 1}} wins</h1>
+      <p>Enter player name:</p>
+      <p>
+        <input type="text" value="" maxlength="3">
+      </p>
+      <p>
+        <input type="button" @click="submitWinner" value="SAVE">
+        <input type="button" @click="resetScores" value="BACK">
+      </p>
+
     </div>
   </div>
 
