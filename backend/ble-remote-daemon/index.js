@@ -4,6 +4,7 @@ const EventEmitter = require('events');
 
 const DEVICE_TIMEOUT = 2000;
 const MAX_POSITION = 4095;
+const DEVICE_CHECK_INTERVAL = 400;
 
 class BLERemoteDaemon extends EventEmitter {
   constructor() {
@@ -14,6 +15,9 @@ class BLERemoteDaemon extends EventEmitter {
     this.timers = {};
     noble.on('stateChange', this.onBLEAdapterStateChanged);
     noble.on('discover', this.onBLEDeviceDiscovered.bind(this));
+    setInterval(() => {
+      this.checkDeviceTimeout();
+    }, DEVICE_CHECK_INTERVAL);
   }
 
   onBLEAdapterStateChanged(state) {
@@ -51,24 +55,23 @@ class BLERemoteDaemon extends EventEmitter {
           this.positions[devId] = pos;
           this.emit('deviceFound', devId);
           console.log(`found device ${devId}`);
-        } else {
-          this.positions[devId] = pos;
-          // console.log(`position (${devId}) = ${pos}`);
         }
-        this.resetDeviceTimeout(devId);
+        this.positions[devId] = pos;
+        // console.log(`position (${devId}) = ${pos}`);
+        this.timers[devId] = Date.now();
       }
     }
   }
-  resetDeviceTimeout(devId) {
-    if (this.timers[devId]) {
-      clearTimeout(this.timers[devId]);
-    }
-    this.timers[devId] = setTimeout(() => {
-      delete this.timers[devId];
-      delete this.positions[devId];
-      this.emit('deviceLost', devId);
-      console.log(`lost device ${devId}`);
-    }, DEVICE_TIMEOUT);
+  checkDeviceTimeout() {
+    Object.keys(this.timers).forEach(devId => {
+      if (!this.timers[devId]) return;
+      if (Date.now() - this.timers[devId] > DEVICE_TIMEOUT) {
+        this.emit('deviceLost', devId);
+        console.log(`lost device ${devId}`);
+        delete this.timers[devId];
+        delete this.positions[devId];
+      }
+    });
   }
 }
 
