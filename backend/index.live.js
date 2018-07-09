@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const WebSocket = require('uws');
-const bleServer = require('./ble-remote-daemon/index.live');
+const bleClient = require('./ble-remote-daemon/index.live');
 
 const HTTP_PORT = 1234;
 const WS_PORT = 8080;
@@ -20,20 +20,53 @@ app.listen(HTTP_PORT, () =>
 wss.on('connection', function connection(ws) {
   console.log('Frontend connected');
   intervalId = setInterval(() => {
-    if (ws.readyState !== WebSocket.OPEN) {
+    if (ws.readyState !== WebSocket.OPEN || !bleClient.positions) {
       return;
     }
-    // TODO Send 'position' event
+    // Send 'position' event
+    ws.send(
+      JSON.stringify({
+        event: 'position',
+        positions: bleClient.positions
+      })
+    );
   }, 1000 / FRAME_RATE);
 
-  // TODO Send 'playerIn' event on BLE 'deviceFound'
-  
-  // TODO Send 'playerOut' event on BLE 'deviceLost'
+  // Send 'playerIn' event on BLE 'deviceFound'
+  bleClient.on('deviceFound', id => {
+    ws.send(
+      JSON.stringify({
+        event: 'playerIn',
+        id: id
+      })
+    );
+  });
+
+  // Send 'playerOut' event on BLE 'deviceLost'
+  bleClient.on('deviceLost', id => {
+    ws.send(
+      JSON.stringify({
+        event: 'playerOut',
+        id: id
+      })
+    );
+  });
 
   ws.on('message', data => {
     switch (data) {
       case 'getPlayers':
-        // TODO Send 'playerIn' events
+        // Send 'playerIn' events
+        if (!bleClient.positions) {
+          return;
+        }
+        Object.keys(bleClient.positions).forEach(id => {
+          ws.send(
+            JSON.stringify({
+              event: 'playerIn',
+              id
+            })
+          );
+        });
         break;
 
       default:
@@ -43,7 +76,8 @@ wss.on('connection', function connection(ws) {
   });
 
   ws.on('close', () => {
-    // TODO remove all the listeners on the BLE server
+    // remove all the listeners on the BLE server
+    bleClient.removeAllListeners();
     clearInterval(intervalId);
   });
 });

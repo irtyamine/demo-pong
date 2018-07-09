@@ -7,7 +7,8 @@
     "start": "node backend/index.js",
     "daemon": "sudo node backend/ble-remote-daemon/index.js",
     "build-frontend": "cd frontend && parcel build index.html",
-    "dev-frontend": "cd frontend && parcel watch index.html"
+    "dev-frontend": "cd frontend && parcel watch index.html",
+    "live": "node backend/index.live.js"
   },
   "repository": {
     "type": "git",
