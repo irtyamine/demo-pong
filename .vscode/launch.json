@@ -5,11 +5,13 @@
       "type": "node",
       "request": "launch",
       "name": "Dev",
+      "runtimeVersion": "8.15.0",
       "program": "${workspaceFolder}/backend/index.js"
     },
     {
       "type": "node",
       "request": "launch",
+      "runtimeVersion": "8.15.0",
       "name": "Live Coding",
       "program": "${workspaceFolder}/backend/index.live.js"
     }

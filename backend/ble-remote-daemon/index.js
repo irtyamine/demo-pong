@@ -52,7 +52,6 @@ class BLERemoteDaemon extends EventEmitter {
       if (vars.manufacturerID == 0x6012 && vars.deviceSKU === 2) {
         const pos = vars.position / MAX_POSITION;
         if (typeof this.positions[devId] === 'undefined') {
-          this.positions[devId] = pos;
           this.emit('deviceFound', devId);
           console.log(`found device ${devId}`);
         }

@@ -1,5 +1,7 @@
 # BLE Pong Live Coding demo
 
+**Warning** Compatible with node v8.15.0
+
 ## The tools
 
 - [Noble](https://github.com/noble/noble)
