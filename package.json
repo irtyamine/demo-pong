@@ -34,6 +34,7 @@
     "ws": "^5.2.0"
   },
   "devDependencies": {
+    "cssnano": "^4.1.10",
     "less": "^3.0.4"
   },
   "browserslist": [

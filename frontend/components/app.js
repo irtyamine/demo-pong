@@ -17,7 +17,8 @@ new Vue({
     scores: [0, 0],
     positions: {},
     isPlaying: false,
-    winnerName: ''
+    winnerName: '',
+    sound: false
   },
   methods: {
     resetScores() {
@@ -107,9 +108,11 @@ new Vue({
       if (event.keyCode === 83) {
         if (this.$refs.music.volume > 0) {
           console.log('sound off');
+          this.sound = false;
           this.$refs.music.volume = 0;
         } else {
           console.log('sound on');
+          this.sound = true;
           this.$refs.music.volume = 1;
         }
       }
@@ -118,7 +121,7 @@ new Vue({
     pong.init(this.$refs.pongContainer, this.incrementScore);
 
     window.ws = new ReconnectingWebSocket('ws://localhost:8080', null, {
-      debug: true
+      debug: false
     });
     window.ws.onmessage = message => {
       const parsed = JSON.parse(message.data);

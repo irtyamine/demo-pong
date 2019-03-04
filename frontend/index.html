@@ -1,51 +1,67 @@
 <html>
+  <head>
+    <title>Pong!</title>
+    <link rel="stylesheet" href="style.less" />
+  </head>
 
-<head>
-  <title>Pong!</title>
-  <link rel="stylesheet" href="style.less">
-</head>
-
-<body class="noisy">
-
-  <div id="pong">
-    <audio src="assets/pong_song.mp3" ref="music" loop="true"></audio>
-    <div v-for="(score, index) in scores" :key="`score-${index}`" :id="`score-player-${index + 1}`" class="score">{{ score }}</div>
-    <!-- <div v-for="(speed, key, index) in speeds" :key="`position-${key}`" :id="`position-player-${index + 1}`" class="position">{{ speed }}</div> -->
-    <div ref="pongContainer" v-bind:class="{nocursor: isPlaying}"></div>
-
-    <div id="splash" class="screen" v-show="!isPlaying && !gameEnd">
-      <h1>Welcome to Pong</h1>
-      <p></p>
-      <p v-show="arePlayersConnected">Press &lt;spacebar&gt; to play</p>
-      <p v-show="!arePlayersConnected">Waiting for players to connect...</p>
-      <p></p>
-      <div>
-        <span class="player-indicator" v-bind:class="{connected: connectedPlayer1}">Player 1 (top)</span>
-        <span class="player-indicator" v-bind:class="{connected: connectedPlayer2}">Player 2 (bottom)</span>
+  <body class="noisy">
+    <div id="pong">
+      <audio src="assets/pong_song.mp3" ref="music" loop="true"></audio>
+      <div
+        v-for="(score, index) in scores"
+        :key="`score-${index}`"
+        :id="`score-player-${index + 1}`"
+        class="score"
+      >
+        {{ score }}
       </div>
-    </div>
+      <div class="sound-state">
+        <img v-if="!sound" src="assets/volume-off.svg" />
+        <img v-if="sound" src="assets/volume-on.svg" />
+      </div>
+      <!-- <div v-for="(speed, key, index) in speeds" :key="`position-${key}`" :id="`position-player-${index + 1}`" class="position">{{ speed }}</div> -->
+      <div ref="pongContainer" v-bind:class="{nocursor: isPlaying}"></div>
 
-    <div id="high-scores" class="screen"></div>
-    <div id="enter-player-name" v-show="!isPlaying && gameEnd" class="screen">
-      <h1>Player {{winnerIndex + 1}} wins</h1>
-      <!-- <p>Enter player name:</p>
+      <div id="splash" class="screen" v-show="!isPlaying && !gameEnd">
+        <h1>Welcome to Pong</h1>
+        <p></p>
+        <p v-show="arePlayersConnected">Press &lt;spacebar&gt; to play</p>
+        <p v-show="arePlayersConnected">Press &lt;S&gt; to toggle sound</p>
+        <p v-show="!arePlayersConnected">Waiting for players to connect...</p>
+        <p></p>
+        <div>
+          <span
+            class="player-indicator"
+            v-bind:class="{connected: connectedPlayer1}"
+            >Player 1 (top)</span
+          >
+          <span
+            class="player-indicator"
+            v-bind:class="{connected: connectedPlayer2}"
+            >Player 2 (bottom)</span
+          >
+        </div>
+      </div>
+
+      <div id="high-scores" class="screen"></div>
+      <div id="enter-player-name" v-show="!isPlaying && gameEnd" class="screen">
+        <h1>Player {{ winnerIndex + 1 }} wins</h1>
+        <!-- <p>Enter player name:</p>
       <p>
         <input type="text" value="" maxlength="3">
       </p>
       <p>
         <input type="button" @click="submitWinner" value="SAVE"> -->
-      <p>
-        <input type="button" @click="resetScores" value="BACK">
-      </p>
-
+        <p>
+          <input type="button" @click="resetScores" value="BACK" />
+        </p>
+      </div>
     </div>
-  </div>
 
-  <!-- <div class="piece output"></div> -->
-  <div class="piece scanlines noclick"></div>
-  <div class="piece glow noclick"></div>
+    <!-- <div class="piece output"></div> -->
+    <div class="piece scanlines noclick"></div>
+    <div class="piece glow noclick"></div>
 
-  <script src="components/app.js"></script>
-</body>
-
+    <script src="components/app.js"></script>
+  </body>
 </html>
