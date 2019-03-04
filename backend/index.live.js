@@ -23,7 +23,6 @@ wss.on('connection', function connection(ws) {
     if (ws.readyState !== WebSocket.OPEN || !bleClient.positions) {
       return;
     }
-    // Send 'position' event
     ws.send(
       JSON.stringify({
         event: 'position',
@@ -32,7 +31,6 @@ wss.on('connection', function connection(ws) {
     );
   }, 1000 / FRAME_RATE);
 
-  // Send 'playerIn' event on BLE 'deviceFound'
   bleClient.on('deviceFound', id => {
     ws.send(
       JSON.stringify({
@@ -42,7 +40,6 @@ wss.on('connection', function connection(ws) {
     );
   });
 
-  // Send 'playerOut' event on BLE 'deviceLost'
   bleClient.on('deviceLost', id => {
     ws.send(
       JSON.stringify({
@@ -55,7 +52,6 @@ wss.on('connection', function connection(ws) {
   ws.on('message', data => {
     switch (data) {
       case 'getPlayers':
-        // Send 'playerIn' events
         if (!bleClient.positions) {
           return;
         }
@@ -76,7 +72,6 @@ wss.on('connection', function connection(ws) {
   });
 
   ws.on('close', () => {
-    // remove all the listeners on the BLE server
     bleClient.removeAllListeners();
     clearInterval(intervalId);
   });
