@@ -1,4 +1,6 @@
 const EventEmitter = require('events');
+const noble = require('noble');
+const binary = require('binary');
 
 const MAX_POSITION = 4095;
 const DEVICE_CHECK_INTERVAL = 400;
