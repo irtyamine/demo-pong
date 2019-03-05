@@ -1,6 +1,4 @@
 const EventEmitter = require('events');
-const noble = require('noble');
-const binary = require('binary');
 
 const MAX_POSITION = 4095;
 const DEVICE_CHECK_INTERVAL = 400;
@@ -16,6 +14,11 @@ const DEV_SKU = 2;
  * `deviceLost` event in the BLE daemon.
  */
 
-class BLEClient extends EventEmitter {}
+class BLEClient extends EventEmitter {
+  constructor() {
+    super();
+    this.positions = {};
+  }
+}
 
 module.exports = new BLEClient();
