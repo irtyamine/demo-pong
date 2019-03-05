@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 
 const MAX_POSITION = 4095;
+const DEVICE_TIMEOUT = 2000;
 const DEVICE_CHECK_INTERVAL = 400;
 const MANUFACTURER_ID = 0x6012;
 const DEV_SKU = 2;
