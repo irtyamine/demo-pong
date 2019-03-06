@@ -2,8 +2,6 @@
 
 This repository contains the code used in the "Play Pong with two IoT devices and Node.js".
 
-**Warning** Compatible with node v8.15.0
-
 ## TODO
 
 1. Code the logic that sends the `deviceFound` event and updates the position on
@@ -15,7 +13,15 @@ This repository contains the code used in the "Play Pong with two IoT devices an
 
 Two [ESP32 devices](https://www.ebay.com/itm/ESP-32-ESP32S-Development-Board-2-4GHz-WiFi-Bluetooth-Antenna-CP2102-Module-POP/264102703499?epid=15017838005&hash=item3d7dbf718b:g:h4AAAOSwI01cIe7r) flashed with the microcode in `devices/`.
 
+To compile and flash the microcode, cwd to `devices/k-pong-remote` and launch
+
+```bash
+make flash
+```
+
 ## The libraries
+
+**Warning** Compatible with node v8.15.0
 
 - [Noble](https://github.com/noble/noble)
 - [Binary](https://github.com/substack/node-binary)
