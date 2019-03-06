@@ -95,6 +95,6 @@ wss.on('connection', function connection(ws) {
    */
   ws.on('close', () => {
     bleClient.removeAllListeners();
-    clearInterval(positionInterval);
+    clearInterval(bleClient.positionInterval);
   });
 });

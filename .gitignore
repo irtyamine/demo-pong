@@ -63,3 +63,7 @@ typings/
 # parceljs
 .cache
 dist
+
+build/
+.vscode/
+sdkconfig.old
